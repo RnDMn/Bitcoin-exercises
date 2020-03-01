@@ -1,3 +1,5 @@
+** Description
+Assemble the genesis block header and calculate the double sha256 hash. Check that it matches the expected hash.
 ** Compilation
 Compile with 
 #+BEGIN_SRC 
