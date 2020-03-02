@@ -41,7 +41,7 @@ int main()
 
   WriteLE32(tmp, version);
   std::vector<uint8_t> versionBytes(tmp, tmp + UINT32_SIZE);
-  
+ 
   WriteLE32(tmp, time);
   std::vector<uint8_t> timeBytes(tmp, tmp + UINT32_SIZE);
 
@@ -69,7 +69,7 @@ int main()
   std::reverse(merkleRootBytes.begin(), merkleRootBytes.end());
 
   // TODO: Try to use some implemented class like CDataStream or CVectorWriter instead.  
-  std::vector<unsigned char> bhBytes(versionBytes.begin(), versionBytes.end());
+  std::vector<uint8_t> bhBytes(versionBytes.begin(), versionBytes.end());
   bhBytes.insert(bhBytes.end(), pHashBytes.begin(), pHashBytes.end());
   bhBytes.insert(bhBytes.end(), merkleRootBytes.begin(), merkleRootBytes.end());
   bhBytes.insert(bhBytes.end(), timeBytes.begin(), timeBytes.end());
@@ -82,8 +82,10 @@ int main()
   unsigned char hash[HASH_SIZE];
   dHasher.Finalize(hash);
 
+  dHasher.
+  
   // print results to cout
-  std::vector<unsigned char> hashBytes(hash, hash + HASH_SIZE);
+  std::vector<uint8_t> hashBytes(hash, hash + HASH_SIZE);
   std::reverse(hashBytes.begin(), hashBytes.end());
   std::string obtainedHash = HexStr(hashBytes);
   std::cout << obtainedHash  << std::endl;
@@ -99,7 +101,8 @@ int main()
       return 1;
     }
   }
-  std::cout << "Test succeed!"  << std::endl;
+  std::cout << "Test succeeded!"  << std::endl;
   
   return 0;
 }
+
