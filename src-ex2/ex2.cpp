@@ -1,13 +1,10 @@
 
-
 #include <iostream>
 #include <algorithm>
 #include <compat/byteswap.h>
 #include <util/strencodings.h>
 #include <crypto/common.h>
 #include "Sha256.h"
-
-
 
 
 // ********************************************************************************************
@@ -32,8 +29,6 @@
 // ********************************************************************************************
 
 
-
-
 int main ()
 {
   /* 4 bytes items */
@@ -42,7 +37,6 @@ int main ()
   time = 1231006505; 
   bits = 486604799;
   nonce = 2083236893;
-
 
   /* 32 bytes items */
   std::string pHash = "0000000000000000000000000000000000000000000000000000000000000000";
@@ -55,7 +49,6 @@ int main ()
   merkleRootBytes = ParseHex(merkleRoot);
   std::reverse(merkleRootBytes.begin(), merkleRootBytes.end());
   
-
   /* this implementation of sha256 takes either uint8_t or uint32_t arrays. We go wiht the latter. 
    * FIPS 180-3: paragraph 5.Preprocessing: prepare the message in multiple of 512 bits. As block 
    * header is 80 bytes (640 bits) we need two blocks of 512 bits each.  
@@ -84,7 +77,7 @@ int main ()
   block2[15] = 0b0000001010000000;
 
   // print blocks
-  uint8_t blocks[4*16]{};
+  uint8_t blocks[UINT32_SIZE * BLOCK_LEN] {};
   for (int i=0, j=0; i<16; i++, j+=4){
     WriteBE32(&blocks[j], block1[i]);
   }
@@ -97,7 +90,6 @@ int main ()
   std::vector<uint8_t> block2Bytes(blocks, blocks + sizeof(blocks)/sizeof(blocks[0]));
   std::cout << "Block2: " << HexStr(block2Bytes)  << std::endl;
 
-  
   /* first sha256 hash: we aply the compression function as many times as blocks we have in sequence, using 
    * the previous output as input for the next round
    */
@@ -106,21 +98,17 @@ int main ()
   SHA256::sha256StCompress(hash, block1);   // in this step the variable hash contains we have the so called "midstate".
   SHA256::sha256StCompress(hash, block2);
 
-
   /* re-initialize block1 for second hash. Block 2 will not be used, as now the message is a hash 32 bytes */
   memset(block1, 0, sizeof(block1));
   memcpy(block1, hash, sizeof(hash));
-
 
   /* padding for 32 bytes */
   block1[8] = 0b10000000 << 24;
   block1[15] = 0b0000000100000000;
 
-
   /* double hash */
   SHA256::sha256Init(hash);
   SHA256::sha256StCompress(hash, block1);
-
 
   /* print double hash result to cout */
   std::vector<unsigned char> hashBytes;
@@ -135,7 +123,6 @@ int main ()
   std::string obtainedHash = HexStr(hashBytes);
   std::cout << "Genesis block double Sha256 hash: " << obtainedHash  << std::endl;
 
-  
   /* check results */
   std::string expectedHash = "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f";
 
@@ -149,7 +136,6 @@ int main ()
   }
   std::cout << "Test succeeded!"  << std::endl;
 
-  
   return 0;
 }
 
