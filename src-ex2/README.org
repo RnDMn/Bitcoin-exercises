@@ -1,0 +1,7 @@
+** Description
+Assemble the genesis block header and calculate the double sha256 hash. Check that it matches the expected hash.
+** Compilation
+Compile with 
+#+BEGIN_SRC 
+g++ -Wall ex1.cpp -I../include/ -o ex1 -lbitcoin_util -lbitcoin_crypto_base -lbitcoin_crypto_shani -lbitcoin_crypto_avx2 -lbitcoin_crypto_sse41 -L../lib/
+#+END_SRC
