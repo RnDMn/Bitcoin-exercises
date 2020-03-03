@@ -30,7 +30,6 @@
 #include <crypto/common.h>
 #include <compat/byteswap.h>
 #include "Sha256.h"
-#include "Utils.h"
 
 
 void SHA256::sha256Init(uint32_t state[8])
